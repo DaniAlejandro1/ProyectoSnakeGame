@@ -1,7 +1,7 @@
 package principal;
 
-public class ConfgPantalla  {
+public class MainClass {
     public static void main(String[] args) {
-
+        new GameClass();
     }
 }
