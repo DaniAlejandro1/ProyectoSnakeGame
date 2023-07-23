@@ -23,10 +23,10 @@ public class KeyBoardinputs implements KeyListener {
         Movimiento movimiento = new Movimiento();
 
         switch (e.getKeyCode()){
-            case KeyEvent.VK_W -> snakePanel.moverArriba();
-            case KeyEvent.VK_A -> snakePanel.moverIzquierda();
-            case KeyEvent.VK_S -> snakePanel.moverAbajo();
-            case KeyEvent.VK_D -> snakePanel.moverDerecha();
+            case KeyEvent.VK_W -> snakePanel.setDirecciones("arr");
+            case KeyEvent.VK_A -> snakePanel.setDirecciones("iz");
+            case KeyEvent.VK_S -> snakePanel.setDirecciones("ab");
+            case KeyEvent.VK_D -> snakePanel.setDirecciones("der");
         }
 
     }
