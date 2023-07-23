@@ -14,17 +14,23 @@ public class SnakePanel extends JPanel {
     private Mouseinputs mouseinputs;
 
 
-    private int tamano = 50;
+    private int tamano = 25;
     private int tamanoMax = 500;
 
     private ArrayList<int[]> body;
+    private int[] comida;
     private HashMap<String, Runnable> direcciones;
 
     public SnakePanel() {
+        this.setBounds(0,0,tamanoMax,tamanoMax);
         addKeyListener(new KeyBoardinputs(this));
         body = new ArrayList<>();
+        comida = new int[2];
+        generarComida();
+        comida[0]=100;
+        comida[1] = 0;
         body.add(new int[]{0, 0});
-        body.add(new int[]{50, 0});
+        body.add(new int[]{25, 0});
         mouseinputs = new Mouseinputs();
         addMouseListener(mouseinputs);
         addMouseMotionListener(mouseinputs);
@@ -42,13 +48,38 @@ public class SnakePanel extends JPanel {
             g.fillRect(par[0], par[1], tamano, tamano);
             repaint();
         }
+        g.setColor(Color.red);
+        for (int com : comida){
+            g.fillRect(comida[0],comida[1],tamano,tamano);
+        }
 
 
     }
 
     public void avanzar(int[] avance) {
-        body.add(avance);
-        body.remove(body.get(0));
+        if (body.contains(avance)){
+            JOptionPane.showMessageDialog(this,"Perdiste");
+        } else if (comida[0]==avance[0] && comida[1]==avance[1]) {
+            body.add(comida.clone());
+            generarComida();
+        }else {
+            body.add(avance);
+            body.remove(body.get(0));
+        }
+
+
+    }
+
+    public void generarComida(){
+        int x = (int) (Math.random()*(tamanoMax/tamano));
+        int y = (int) (Math.random()*(tamanoMax/tamano));
+
+        if (body.contains(new int[]{x,y})){
+            generarComida();
+        }else {
+            comida[0]=x;
+            comida[1]=y;
+        }
     }
 
     public int getXPosiCabeza() {
