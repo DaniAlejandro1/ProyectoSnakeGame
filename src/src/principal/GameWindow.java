@@ -5,6 +5,7 @@ import javax.swing.*;
 public class GameWindow {
     private JFrame jFrame;
 
+
     public GameWindow(JPanel panel){
         jFrame = new JFrame();
         //jFrame.setSize(800, 800);
@@ -14,5 +15,6 @@ public class GameWindow {
         jFrame.setLocationRelativeTo(null);
         jFrame.setResizable(false);
         jFrame.setVisible(true);
+
     }
 }
