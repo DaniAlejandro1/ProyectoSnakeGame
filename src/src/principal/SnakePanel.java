@@ -6,30 +6,29 @@ import inputs.Mouseinputs;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class SnakePanel extends JPanel {
 
     private Mouseinputs mouseinputs;
-    private int xDelta = 0;
-    private int yDelta = 0;
 
 
-    private int tamaño = 50;
+    private int tamano = 50;
 
     private ArrayList<int[]> body;
     private HashMap<String, Runnable> direcciones;
 
     public SnakePanel() {
+        addKeyListener(new KeyBoardinputs(this));
         body = new ArrayList<>();
-        direcciones = new HashMap<>();
 
         body.add(new int[]{0, 0});
-        body.add(new int[]{50, 0});
+        body.add(new int[]{50,0});
         mouseinputs = new Mouseinputs();
-        addKeyListener(new KeyBoardinputs(this));
         addMouseListener(mouseinputs);
         addMouseMotionListener(mouseinputs);
+
 
 
     }
@@ -40,39 +39,65 @@ public class SnakePanel extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        for (int i = 0; i < body.size(); i++) {
-            g.fillRect(body.get(i)[0] + xDelta, body.get(i)[1] + yDelta, tamaño, tamaño);
+        for (int[] par: body) {
+            g.fillRect(par[0],par[1],tamano,tamano);
             repaint();
         }
+
 
     }
 
     public void avanzar(int[] avance) {
         body.add(avance);
-        body.remove(body.size() - 1);
+        body.remove(body.get(0));
     }
 
     public int getXPosiCabeza() {
-        return body.get(0)[0];
+        return body.get(body.size()-1)[0];
     }
 
     public int getYPosiCabeza() {
-        return body.get(0)[1];
+        return body.get(body.size()-1)[1];
     }
-    public int getTamaño() {
-        return tamaño;
-    }
-
-
-
-
-    public void changeXDelta(int value) {
-        this.xDelta += value;
-
+    public int getTamano() {
+        return tamano;
     }
 
-    public void changeYDelta(int value) {
-        this.yDelta += value;
+
+
+    public void moverDerecha(){
+
+        int x = getXPosiCabeza() + getTamano();
+        int y = getYPosiCabeza();
+        int[] nuevaCord = new int[]{x,y};
+        System.out.println("Moviendo hacia la derecha");
+        avanzar(nuevaCord);
+        for (int [] cord:body) {
+
+            System.out.println(Arrays.toString(cord)+" + Nueva cord "+Arrays.toString(nuevaCord)+" x: "+x+" y: "+y);
+
+        }
+    }
+    public void moverIzquierda(){
+        int x = getXPosiCabeza() - getTamano();
+        int y = getYPosiCabeza();
+        avanzar(new int[]{x,y});
+        System.out.println("Moviendo a la izquierda");
 
     }
+
+    public void moverArriba() {
+        int x = getXPosiCabeza();
+        int y = getYPosiCabeza() - getTamano();
+        avanzar(new int[]{x,y});
+        System.out.println("Moviendo hacia arriba");
+    }
+    public void moverAbajo(){
+        int x = getXPosiCabeza();
+        int y = getYPosiCabeza() + getTamano();
+        avanzar(new int[]{x,y});
+        System.out.println("Moviendo hacia abajo");
+    }
+
+    
 }

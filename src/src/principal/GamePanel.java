@@ -22,7 +22,7 @@ public class GamePanel extends JPanel {
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        //g.fillRect(tamCuadros,tamCuadros,tamCuadros-1,tamCuadros-1);
+
         g.setColor(colorCuadros);
         g.fillRect(0,0,tamMax,tamMax);
         g.setColor(colorFondo);
