@@ -5,8 +5,7 @@ import inputs.Mouseinputs;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -16,7 +15,10 @@ public class SnakePanel extends JPanel {
     private Mouseinputs mouseinputs;
     private final int Pantalla = 600;
     private final int cuadrosSize = 30;
-    private final int Delay = 150;
+    private final int Delay = 120;
+    //private final int MargenX = 2*cuadrosSize;
+    //private final int MargenSuperior = 100;
+    //private final int MargenInferior = 2*cuadrosSize;
     private final int cantCuadros = (int) Pantalla / cuadrosSize;
     private String direccion = "der";
     Timer timer;
@@ -36,7 +38,7 @@ public class SnakePanel extends JPanel {
         comida = new int[2];
         generarComida();
 
-        iniSnakeInicial(6);
+        iniSnakeInicial(1);
 
         mouseinputs = new Mouseinputs();
         addMouseListener(mouseinputs);
@@ -58,7 +60,7 @@ public class SnakePanel extends JPanel {
     }
 
     public void iniSnakeInicial(int largo) {
-        for (int i = 0; i <= largo; i++) {
+        for (int i = 0; i < largo; i++) {
             body.add(new int[]{i * cuadrosSize, 0});
         }
     }
@@ -148,7 +150,7 @@ public class SnakePanel extends JPanel {
 
             int x = getXPosiCabeza() + getCuadrosSize();
             int y = getYPosiCabeza();
-            avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
+            avanzar(new int[]{Math.floorMod(x,Pantalla), Math.floorMod(y, Pantalla)});
         }
     }
 
@@ -156,7 +158,7 @@ public class SnakePanel extends JPanel {
         if (!direccion.equals("der")) {
             int x = getXPosiCabeza() - getCuadrosSize();
             int y = getYPosiCabeza();
-            avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
+            avanzar(new int[]{Math.floorMod(x,Pantalla), Math.floorMod(y, Pantalla)});
         }
     }
 
@@ -164,7 +166,7 @@ public class SnakePanel extends JPanel {
         if (!direccion.equals("aba")) {
             int x = getXPosiCabeza();
             int y = getYPosiCabeza() - getCuadrosSize();
-            avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
+            avanzar(new int[]{Math.floorMod(x,Pantalla), Math.floorMod(y, Pantalla)});
         }
     }
 
