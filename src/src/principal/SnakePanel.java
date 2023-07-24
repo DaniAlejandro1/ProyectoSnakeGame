@@ -48,18 +48,18 @@ public class SnakePanel extends JPanel {
         timer.start();
 
 
-
     }
-    public void iniDirecciones(){
+
+    public void iniDirecciones() {
         direcciones.put("arr", this::moverArriba);
         direcciones.put("ab", this::moverAbajo);
         direcciones.put("iz", this::moverIzquierda);
         direcciones.put("der", this::moverDerecha);
     }
 
-    public void iniSnakeInicial(int largo){
+    public void iniSnakeInicial(int largo) {
         for (int i = 0; i <= largo; i++) {
-            body.add(new int[]{i*cuadrosSize,0});
+            body.add(new int[]{i * cuadrosSize, 0});
         }
     }
 
@@ -67,17 +67,25 @@ public class SnakePanel extends JPanel {
         super.paintComponent(g);
         g.setColor(Color.gray);
         direcciones.get(direccion).run();
+        pintarSerpiente(g);
+        pintarComida(g);
+
+
+    }
+
+    public void pintarSerpiente(Graphics g) {
         g.setColor(Color.blue);
         for (int[] par : body) {
-            g.fillRect(par[0], par[1], cuadrosSize-1, cuadrosSize-1);
+            g.fillRect(par[0], par[1], cuadrosSize - 1, cuadrosSize - 1);
 
         }
+    }
+
+    public void pintarComida(Graphics g) {
         g.setColor(Color.red);
         for (int com : comida) {
             g.fillOval(comida[0], comida[1], cuadrosSize, cuadrosSize);
         }
-
-
     }
 
     public void avanzar(int[] avance) {
@@ -100,7 +108,7 @@ public class SnakePanel extends JPanel {
     public boolean verContacto(int[] cabeza) {
         boolean colision = false;
         for (int[] ints : body) {
-            if (cabeza[0] == ints[0] && cabeza[1] == ints[1]){
+            if (cabeza[0] == ints[0] && cabeza[1] == ints[1]) {
                 colision = true;
                 return colision;
             }
@@ -131,16 +139,17 @@ public class SnakePanel extends JPanel {
         return cuadrosSize;
     }
 
-    public void setDirecciones(String direcciones){
+    public void setDirecciones(String direcciones) {
         this.direccion = direcciones;
     }
-    public void moverDerecha() {
-            if (!direccion.equals("iz")){
 
-                int x = getXPosiCabeza() + getCuadrosSize();
-                int y = getYPosiCabeza();
-                avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
-            }
+    public void moverDerecha() {
+        if (!direccion.equals("iz")) {
+
+            int x = getXPosiCabeza() + getCuadrosSize();
+            int y = getYPosiCabeza();
+            avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
+        }
     }
 
     public void moverIzquierda() {
