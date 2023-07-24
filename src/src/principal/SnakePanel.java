@@ -15,8 +15,8 @@ public class SnakePanel extends JPanel {
 
     private Mouseinputs mouseinputs;
     private final int Pantalla = 600;
-    private final int cuadrosSize = 25;
-    private final int Delay = 180;
+    private final int cuadrosSize = 30;
+    private final int Delay = 150;
     private final int cantCuadros = (int) Pantalla / cuadrosSize;
     private String direccion = "der";
     Timer timer;
@@ -43,9 +43,6 @@ public class SnakePanel extends JPanel {
         addMouseMotionListener(mouseinputs);
 
         timer = new Timer(Delay, e -> {
-
-            direcciones.get(direccion).run();
-
             repaint();
         });
         timer.start();
@@ -70,14 +67,6 @@ public class SnakePanel extends JPanel {
         super.paintComponent(g);
         g.setColor(Color.gray);
         direcciones.get(direccion).run();
-        for (int i = 0; i < cantCuadros; i++) {
-            for (int j = 0; j < cantCuadros; j++) {
-                g.fillRect(i*cuadrosSize, j*cuadrosSize, cuadrosSize-1, cuadrosSize-1);
-            }
-
-           // g.drawRect(cuadrosSize * i, 0, cuadrosSize * i-1, Pantalla-1);
-
-        }
         g.setColor(Color.blue);
         for (int[] par : body) {
             g.fillRect(par[0], par[1], cuadrosSize-1, cuadrosSize-1);
@@ -94,6 +83,7 @@ public class SnakePanel extends JPanel {
     public void avanzar(int[] avance) {
         int[] aux = avance;
         if (verContacto(avance)) {
+            timer.stop();
             JOptionPane.showMessageDialog(this, "Perdiste");
 
         } else if (comida[0] == aux[0] && comida[1] == aux[1]) {
@@ -150,7 +140,6 @@ public class SnakePanel extends JPanel {
                 int x = getXPosiCabeza() + getCuadrosSize();
                 int y = getYPosiCabeza();
                 avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
-                System.out.println("Moviendo hacia la derecha" + " x: " + x + " y: " + y);
             }
     }
 
@@ -159,7 +148,6 @@ public class SnakePanel extends JPanel {
             int x = getXPosiCabeza() - getCuadrosSize();
             int y = getYPosiCabeza();
             avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
-            System.out.println("Moviendo a la izquierda" + " x: " + x + " y: " + y);
         }
     }
 
@@ -168,7 +156,6 @@ public class SnakePanel extends JPanel {
             int x = getXPosiCabeza();
             int y = getYPosiCabeza() - getCuadrosSize();
             avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
-            System.out.println("Moviendo hacia arriba" + " x: " + x + " y: " + y);
         }
     }
 
@@ -178,7 +165,6 @@ public class SnakePanel extends JPanel {
             int x = getXPosiCabeza();
             int y = getYPosiCabeza() + getCuadrosSize();
             avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
-            System.out.println("Moviendo hacia abajo" + " x: " + x + " y: " + y);
         }
     }
 
