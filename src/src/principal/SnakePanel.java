@@ -16,7 +16,7 @@ public class SnakePanel extends JPanel {
     private Mouseinputs mouseinputs;
     private final int Pantalla = 600;
     private final int cuadrosSize = 25;
-    private final int Delay = 100;
+    private final int Delay = 180;
     private final int cantCuadros = (int) Pantalla / cuadrosSize;
     private String direccion = "der";
     Timer timer;
@@ -28,50 +28,59 @@ public class SnakePanel extends JPanel {
 
     public SnakePanel() {
 
-        direcciones.put("arr", this::moverArriba);
-        direcciones.put("ab", this::moverAbajo);
-        direcciones.put("iz", this::moverIzquierda);
-        direcciones.put("der", this::moverDerecha);
+        iniDirecciones();
         addKeyListener(new KeyBoardinputs(this));
         this.setBackground(Color.BLACK);
         this.setPreferredSize(new Dimension(Pantalla, Pantalla));
         body = new ArrayList<>();
         comida = new int[2];
         generarComida();
-        comida[0] = cuadrosSize * 3;
-        comida[1] = 0;
-        body.add(new int[]{0, 0});
-        body.add(new int[]{25, 0});
+
+        iniSnakeInicial(6);
+
         mouseinputs = new Mouseinputs();
         addMouseListener(mouseinputs);
         addMouseMotionListener(mouseinputs);
 
-        timer = new Timer(150, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        timer = new Timer(Delay, e -> {
 
-                direcciones.get(direccion).run();
+            direcciones.get(direccion).run();
 
-                repaint();
-            }
+            repaint();
         });
         timer.start();
 
 
 
     }
+    public void iniDirecciones(){
+        direcciones.put("arr", this::moverArriba);
+        direcciones.put("ab", this::moverAbajo);
+        direcciones.put("iz", this::moverIzquierda);
+        direcciones.put("der", this::moverDerecha);
+    }
+
+    public void iniSnakeInicial(int largo){
+        for (int i = 0; i <= largo; i++) {
+            body.add(new int[]{i*cuadrosSize,0});
+        }
+    }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+        g.setColor(Color.gray);
         direcciones.get(direccion).run();
         for (int i = 0; i < cantCuadros; i++) {
-            g.drawLine(0, cuadrosSize * i, Pantalla, cuadrosSize * i);
-            g.drawRect(cuadrosSize * i, 0, cuadrosSize * i, Pantalla);
+            for (int j = 0; j < cantCuadros; j++) {
+                g.fillRect(i*cuadrosSize, j*cuadrosSize, cuadrosSize-1, cuadrosSize-1);
+            }
+
+           // g.drawRect(cuadrosSize * i, 0, cuadrosSize * i-1, Pantalla-1);
 
         }
         g.setColor(Color.blue);
         for (int[] par : body) {
-            g.fillRect(par[0], par[1], cuadrosSize, cuadrosSize);
+            g.fillRect(par[0], par[1], cuadrosSize-1, cuadrosSize-1);
 
         }
         g.setColor(Color.red);
@@ -82,16 +91,9 @@ public class SnakePanel extends JPanel {
 
     }
 
-    public boolean verContacto() {
-        for (int[] ints : body) {
-            return getXPosiCabeza() == ints[0] && getYPosiCabeza() == ints[1];
-        }
-        return false;
-    }
-
     public void avanzar(int[] avance) {
         int[] aux = avance;
-        if (verContacto()) {
+        if (verContacto(avance)) {
             JOptionPane.showMessageDialog(this, "Perdiste");
 
         } else if (comida[0] == aux[0] && comida[1] == aux[1]) {
@@ -105,11 +107,22 @@ public class SnakePanel extends JPanel {
 
     }
 
+    public boolean verContacto(int[] cabeza) {
+        boolean colision = false;
+        for (int[] ints : body) {
+            if (cabeza[0] == ints[0] && cabeza[1] == ints[1]){
+                colision = true;
+                return colision;
+            }
+        }
+        return colision;
+    }
+
     public void generarComida() {
         Random ranndom = new Random();
 
         int[] aux = new int[]{ranndom.nextInt(cantCuadros) * cuadrosSize, ranndom.nextInt(cantCuadros) * cuadrosSize};
-        if (body.contains(aux)) {
+        if (verContacto(aux)) {
             generarComida();
         } else {
             comida = aux;
@@ -132,40 +145,41 @@ public class SnakePanel extends JPanel {
         this.direccion = direcciones;
     }
     public void moverDerecha() {
+            if (!direccion.equals("iz")){
 
-            int x = getXPosiCabeza() + getCuadrosSize();
-            int y = getYPosiCabeza();
-            avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
-            System.out.println("Moviendo hacia la derecha" + " x: " + x + " y: " + y);
-
+                int x = getXPosiCabeza() + getCuadrosSize();
+                int y = getYPosiCabeza();
+                avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
+                System.out.println("Moviendo hacia la derecha" + " x: " + x + " y: " + y);
+            }
     }
 
     public void moverIzquierda() {
-
+        if (!direccion.equals("der")) {
             int x = getXPosiCabeza() - getCuadrosSize();
             int y = getYPosiCabeza();
             avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
             System.out.println("Moviendo a la izquierda" + " x: " + x + " y: " + y);
-
+        }
     }
 
     public void moverArriba() {
-
+        if (!direccion.equals("aba")) {
             int x = getXPosiCabeza();
             int y = getYPosiCabeza() - getCuadrosSize();
             avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
             System.out.println("Moviendo hacia arriba" + " x: " + x + " y: " + y);
-
+        }
     }
 
     public void moverAbajo() {
 
-
+        if (!direccion.equals("arr")) {
             int x = getXPosiCabeza();
             int y = getYPosiCabeza() + getCuadrosSize();
             avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
             System.out.println("Moviendo hacia abajo" + " x: " + x + " y: " + y);
-
+        }
     }
 
 

@@ -1,6 +1,5 @@
 package inputs;
 
-import principal.Movimiento;
 import principal.SnakePanel;
 
 import java.awt.event.KeyEvent;
@@ -8,7 +7,6 @@ import java.awt.event.KeyListener;
 
 public class KeyBoardinputs implements KeyListener {
     private SnakePanel snakePanel;
-
     public KeyBoardinputs(SnakePanel snakePanel) {
         this.snakePanel = snakePanel;
     }
@@ -20,9 +18,9 @@ public class KeyBoardinputs implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        Movimiento movimiento = new Movimiento();
 
-        switch (e.getKeyCode()){
+
+        switch (e.getKeyCode()) {
             case KeyEvent.VK_W -> snakePanel.setDirecciones("arr");
             case KeyEvent.VK_A -> snakePanel.setDirecciones("iz");
             case KeyEvent.VK_S -> snakePanel.setDirecciones("ab");
