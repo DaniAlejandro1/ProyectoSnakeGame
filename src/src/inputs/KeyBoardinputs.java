@@ -1,13 +1,16 @@
 package inputs;
 
-import principal.SnakePanel;
+import ControlsManage.ValidacionInputs;
+import principal.SnakeClass;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyBoardinputs implements KeyListener {
-    private SnakePanel snakePanel;
-    public KeyBoardinputs(SnakePanel snakePanel) {
+    private final SnakeClass snakePanel;
+
+    public KeyBoardinputs(SnakeClass snakePanel) {
+
         this.snakePanel = snakePanel;
     }
 
@@ -19,12 +22,32 @@ public class KeyBoardinputs implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
 
-
+        String key = String.valueOf(e.getKeyChar());
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W -> snakePanel.setDirecciones("arr");
-            case KeyEvent.VK_A -> snakePanel.setDirecciones("iz");
-            case KeyEvent.VK_S -> snakePanel.setDirecciones("ab");
-            case KeyEvent.VK_D -> snakePanel.setDirecciones("der");
+            case KeyEvent.VK_W -> {
+                if (ValidacionInputs.giroArr(snakePanel,key)) {
+
+                    snakePanel.setDirecciones("arr");
+                }
+            }
+            case KeyEvent.VK_A -> {
+                if (ValidacionInputs.giroIz(snakePanel,key)) {
+                    snakePanel.setDirecciones("iz");
+                }
+
+            }
+            case KeyEvent.VK_S -> {
+                System.out.println(key);
+                if (ValidacionInputs.giroAb(snakePanel,key)) {
+                    snakePanel.setDirecciones("ab");
+                }
+            }
+            case KeyEvent.VK_D -> {
+                if (ValidacionInputs.giroDer(snakePanel,key)) {
+                    snakePanel.setDirecciones("der");
+                }
+            }
+
         }
 
     }

@@ -1,11 +1,14 @@
-package principal;
+package screens;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel {
 
-    private int tamCuadros, can, tamMax,resto;
+    private int tamCuadros;
+    private int can;
+    private int tamMax;
+    private final int resto;
     Color colorFondo = Color.darkGray;
     Color colorCuadros = Color.BLACK;
     Graphics pintor;

@@ -4,9 +4,9 @@ public class Game {
 
     public Game(){
 
-        SnakePanel snakePanel = new SnakePanel();
+        SnakeClass snakePanel = new SnakeClass();
         new GameWindow(snakePanel);
-        snakePanel.requestFocus();
+
 
     }
 

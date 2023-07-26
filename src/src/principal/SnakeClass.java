@@ -10,47 +10,45 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-public class SnakePanel extends JPanel {
+public class SnakeClass extends JPanel {
 
     private Mouseinputs mouseinputs;
+    private KeyBoardinputs keyBoardinputs;
     private final int Pantalla = 600;
     private final int cuadrosSize = 30;
-    private final int Delay = 120;
-    //private final int MargenX = 2*cuadrosSize;
-    //private final int MargenSuperior = 100;
-    //private final int MargenInferior = 2*cuadrosSize;
     private final int cantCuadros = (int) Pantalla / cuadrosSize;
     private String direccion = "der";
-    Timer timer;
-
-
+    ManejodeHilos manejodeHilos;
+    Thread hilo;
     private ArrayList<int[]> body;
     private int[] comida;
     private HashMap<String, Runnable> direcciones = new HashMap<>();
 
-    public SnakePanel() {
+    public SnakeClass() {
 
+        keyBoardinputs = new KeyBoardinputs(this);
+        addKeyListener(keyBoardinputs);
         iniDirecciones();
-        addKeyListener(new KeyBoardinputs(this));
+
         this.setBackground(Color.BLACK);
         this.setPreferredSize(new Dimension(Pantalla, Pantalla));
         body = new ArrayList<>();
         comida = new int[2];
         generarComida();
 
-        iniSnakeInicial(1);
+        iniSnakeInicial(10);
 
         mouseinputs = new Mouseinputs();
         addMouseListener(mouseinputs);
         addMouseMotionListener(mouseinputs);
 
-        timer = new Timer(Delay, e -> {
-            repaint();
-        });
-        timer.start();
+        manejodeHilos = new ManejodeHilos(this);
+        hilo = new Thread(manejodeHilos);
+        hilo.start();
 
 
     }
+
 
     public void iniDirecciones() {
         direcciones.put("arr", this::moverArriba);
@@ -67,11 +65,9 @@ public class SnakePanel extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.gray);
         direcciones.get(direccion).run();
         pintarSerpiente(g);
         pintarComida(g);
-
 
     }
 
@@ -93,7 +89,7 @@ public class SnakePanel extends JPanel {
     public void avanzar(int[] avance) {
         int[] aux = avance;
         if (verContacto(avance)) {
-            timer.stop();
+            manejodeHilos.stop();
             JOptionPane.showMessageDialog(this, "Perdiste");
 
         } else if (comida[0] == aux[0] && comida[1] == aux[1]) {
@@ -108,14 +104,14 @@ public class SnakePanel extends JPanel {
     }
 
     public boolean verContacto(int[] cabeza) {
-        boolean colision = false;
+
         for (int[] ints : body) {
             if (cabeza[0] == ints[0] && cabeza[1] == ints[1]) {
-                colision = true;
-                return colision;
+
+                return true;
             }
         }
-        return colision;
+        return false;
     }
 
     public void generarComida() {
@@ -145,12 +141,15 @@ public class SnakePanel extends JPanel {
         this.direccion = direcciones;
     }
 
+    public String getDireccion(){
+        return this.direccion;
+    }
     public void moverDerecha() {
         if (!direccion.equals("iz")) {
 
             int x = getXPosiCabeza() + getCuadrosSize();
             int y = getYPosiCabeza();
-            avanzar(new int[]{Math.floorMod(x,Pantalla), Math.floorMod(y, Pantalla)});
+            avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
         }
     }
 
@@ -158,7 +157,7 @@ public class SnakePanel extends JPanel {
         if (!direccion.equals("der")) {
             int x = getXPosiCabeza() - getCuadrosSize();
             int y = getYPosiCabeza();
-            avanzar(new int[]{Math.floorMod(x,Pantalla), Math.floorMod(y, Pantalla)});
+            avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
         }
     }
 
@@ -166,7 +165,7 @@ public class SnakePanel extends JPanel {
         if (!direccion.equals("aba")) {
             int x = getXPosiCabeza();
             int y = getYPosiCabeza() - getCuadrosSize();
-            avanzar(new int[]{Math.floorMod(x,Pantalla), Math.floorMod(y, Pantalla)});
+            avanzar(new int[]{Math.floorMod(x, Pantalla), Math.floorMod(y, Pantalla)});
         }
     }
 
